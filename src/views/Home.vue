@@ -3,32 +3,122 @@
     <br><br>
     <div class="row">
       <div class="col-md-6">
-        <form action="/action_page.php">
           <div class="form-group">
-            <label for="coordinate">Coordinate:</label><br>
-            <input type="text" class="form-control" v-model="latitude" style="width:40%; float:left; margin-right:2%">
-            <input type="text" class="form-control" v-model="longitude" style="width:40%; float:left;"><br>
+            <label for="coordinate">Titik awal:</label><br>
+            <input type="text" class="form-control" v-model="latitude" style="width:30%; float:left; margin-right:2%">
+            <input type="text" class="form-control" v-model="longitude" style="width:30%; margin-right:2%">
           </div>
           <div class="form-group">
-            <label for="pwd">Password:</label>
-            <input type="password" class="form-control" id="pwd">
+            <label for="coordinate">Jam Mulai:</label><br>
+            <input type="time" class="form-control">
           </div>
-          <button type="button" class="btn btn-primary" disabled>Submit</button>
-        </form>
+          <button v-on:click="getDestination();" type="button" class="btn btn-primary">Submit</button><br><br>
       </div>
-      
     </div>
+    <div v-for="(selectDestination, index) in selectedDestination" v-bind:key="selectDestination.number" class="row">
+      <div class="col-md-6">
+        <h3>Destinasi {{index+1}}</h3>
+        <div class="form-group" style="width:60%; float:left;">
+          <label for="sel1">Destinasi: </label>
+          <select v-on:change="onChangeDestinasi($event)" class="form-control" v-model="selectDestination.destinasi">
+            <option value="" disabled selected>Destinasi Wisata</option>
+            <option v-for='destinasi in dataDestinasi' v-bind:key="destinasi._id" v-bind:value="destinasi._id">{{destinasi.tempat}}</option>
+          </select>
+        </div>
+        <div class="form-group" style="width:35%; float:right; ">
+          <label for="coordinate">Lama Stay (Jam):</label><br>
+          <input type="number" class="form-control" v-model="selectDestination.lama_stay">
+        </div>
+        <br><br><br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="text-center" style="clear:both">
+          <button v-on:click="addDestination()" class="btn btn-success btn-sm center" id="btnTambahDestinasi" style="display:none"><font-awesome-icon icon="plus"/></button>
+        </div>
+      </div>
+    </div>
+    <br>
+    <button v-on:click="submit()" type="button" class="btn btn-primary" style="width:100%">Submit</button>
   </div>
 </template>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
+import axios from 'axios'
+import 'vue-loading-overlay/dist/vue-loading.css'
 
 export default {
   name: 'home',
   data(){
     return {
-      latitude: "",
-      longitude: "",
+      latitude: "-7.942637178081287",
+      longitude: "112.70264024097918",
+      dataDestinasi: [],
+      selectedDestination:[],
+      res: "",
+      url: "http://127.0.0.1:3000/"
+    }
+  },
+
+  methods:{
+    async getDestination(){
+      const newComponent = new URLSearchParams()
+      newComponent.append('latitude', this.latitude)
+      newComponent.append('longitude', this.longitude)
+
+      axios.post(this.url, newComponent)
+        .then((response) => {
+            this.dataDestinasi = response.data.response;
+            this.selectedDestination.push({
+              number: this.selectedDestination.length + 1,
+              destinasi: "",
+              lama_stay: ""
+            });
+            $("#btnTambahDestinasi").show();
+        })
+        .catch((e) => {
+            /* eslint-disable no-console */
+            console.log(e)
+            /* eslint-enable no-console */
+        })
+    },
+
+    addDestination(){
+      this.selectedDestination.push({
+        number: this.selectedDestination.length + 1,
+        destinasi: "",
+        lama_stay: ""
+      });
+    },
+
+    submit(){
+      const newComponent = new URLSearchParams()
+      newComponent.append('data', JSON.stringify(this.selectedDestination))
+      newComponent.append('latitude', this.latitude)
+      newComponent.append('longitude', this.laongitude)
+
+      axios.post(this.url+"main", newComponent)
+        .then((response) => {
+            this.res = response.data
+        })
+        .catch((e) => {
+            /* eslint-disable no-console */
+            console.log(e)
+            /* eslint-enable no-console */
+        })
+
+    },
+
+    onChangeDestinasi(event) {
+      // console.log(this.dataDestinasi[0])
+      // for (let index = 0; index < this.dataDestinasi.length; index++) {
+      //   if (this.dataDestinasi[index]['tempat'] == event.target.value) {
+      //     this.dataDestinasi.splice(index, 1);
+      //   }
+        
+      // }
     }
   }
 }
