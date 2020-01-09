@@ -10,7 +10,7 @@
           </div>
           <div class="form-group">
             <label for="coordinate">Jam Mulai:</label><br>
-            <input type="time" class="form-control">
+            <input type="number" class="form-control" v-model="jam_mulai">
           </div>
           <button v-on:click="getDestination();" type="button" class="btn btn-primary">Submit</button><br><br>
       </div>
@@ -41,6 +41,8 @@
     </div>
     <br>
     <button v-on:click="submit()" type="button" class="btn btn-primary" style="width:100%">Submit</button>
+    <br><br><br>
+    {{res}}
   </div>
 </template>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -58,6 +60,7 @@ export default {
       dataDestinasi: [],
       selectedDestination:[],
       res: "",
+      jam_mulai: "",
       url: "http://127.0.0.1:3000/"
     }
   },
@@ -97,7 +100,8 @@ export default {
       const newComponent = new URLSearchParams()
       newComponent.append('data', JSON.stringify(this.selectedDestination))
       newComponent.append('latitude', this.latitude)
-      newComponent.append('longitude', this.laongitude)
+      newComponent.append('longitude', this.longitude)
+      newComponent.append('jam_mulai', this.jam_mulai)
 
       axios.post(this.url+"main", newComponent)
         .then((response) => {
