@@ -8,9 +8,16 @@
             <input type="text" class="form-control" v-model="latitude" style="width:30%; float:left; margin-right:2%">
             <input type="text" class="form-control" v-model="longitude" style="width:30%; margin-right:2%">
           </div>
+           <div class="form-group">
+            <label for="coordinate">Titik akhir:</label><br>
+            <input type="text" class="form-control" v-model="latitude_akhir" style="width:30%; float:left; margin-right:2%">
+            <input type="text" class="form-control" v-model="longitude_akhir" style="width:30%; margin-right:2%">
+            <button class="btn btn-sm btn-primary" v-on:click="titikAkhir()">Titik awal</button>
+          </div>
           <div class="form-group">
             <label for="coordinate">Jam Mulai:</label><br>
-            <input type="number" class="form-control" v-model="jam_mulai">
+            <input type="number" class="form-control" v-model="jam_mulai" style="width:15%; float:left">
+            <input type="number" class="form-control" v-model="menit_mulai" style="width:15%">
           </div>
           <button v-on:click="getDestination();" type="button" class="btn btn-primary">Submit</button><br><br>
       </div>
@@ -42,6 +49,9 @@
     <br>
     <button v-on:click="submit()" type="button" class="btn btn-primary" style="width:100%">Submit</button>
     <br><br><br>
+    <ol>
+      <li v-for="(tempat, index) in res.response" v-bind:key="index">{{tempat.nama}}</li>
+    </ol>
     {{res}}
   </div>
 </template>
@@ -57,10 +67,13 @@ export default {
     return {
       latitude: "-7.942637178081287",
       longitude: "112.70264024097918",
+      latitude_akhir: "",
+      longitude_akhir: "",
       dataDestinasi: [],
       selectedDestination:[],
       res: "",
       jam_mulai: "",
+      menit_mulai: "",
       url: "http://127.0.0.1:3000/"
     }
   },
@@ -101,7 +114,10 @@ export default {
       newComponent.append('data', JSON.stringify(this.selectedDestination))
       newComponent.append('latitude', this.latitude)
       newComponent.append('longitude', this.longitude)
+       newComponent.append('latitude_akhir', this.latitude_akhir)
+      newComponent.append('longitude_akhir', this.longitude_akhir)
       newComponent.append('jam_mulai', this.jam_mulai)
+      newComponent.append('menit_mulai', this.menit_mulai)
 
       axios.post(this.url+"main", newComponent)
         .then((response) => {
@@ -113,6 +129,11 @@ export default {
             /* eslint-enable no-console */
         })
 
+    },
+
+    titikAkhir(){
+      this.latitude_akhir = this.latitude;
+      this.longitude_akhir = this.longitude;
     },
 
     onChangeDestinasi(event) {
