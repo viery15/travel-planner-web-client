@@ -13,6 +13,7 @@
             <input type="text" class="form-control" v-model="longitude" style="width:30%; margin-right:2%">
             <button class="btn btn-sm btn-primary" v-on:click="titikPens()">PENS</button>
             <button class="btn btn-sm btn-primary" v-on:click="titikMalang()">Malang</button>
+            <button class="btn btn-sm btn-success" v-on:click="geolocation()">Locate Me</button>
           </div>
            <div class="form-group">
             <label for="coordinate">Titik akhir:</label><br>
@@ -55,6 +56,8 @@
     <br>
     <button v-on:click="submit()" type="button" class="btn btn-primary" style="width:100%">Submit</button>
     <br><br><br>
+    <GmapMap  ref="map" style="width: '100%; height: 300px;" :zoom="1" :center="{lat: 0, lng: 0}"></GmapMap>
+    <br><br><br>
 
     <table class="table table-bordered table-hover">
       <tr>
@@ -70,20 +73,30 @@
         <th>{{tempat.status}}</th>
       </tr>
     </table>
+    <div v-if="location">
+    Your location data is {{ location.coords.latitude }}, {{ location.coords.longitude}}
+  </div>
   </div>
 </template>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAnpBN3XcUxdUV56dXxTfuhHBvEySitlY&callback=initMap">
+</script>
 
 <script>
 import axios from 'axios'
 import 'vue-loading-overlay/dist/vue-loading.css'
+import Coba from '../components/Coba';
+import {gmapApi} from 'vue2-google-maps'
 
 export default {
   name: 'home',
+  directionsService: null,
+  directionsDisplay: null,
   data(){
     return {
-      latitude: "-7.942637178081287",
-      longitude: "112.70264024097918",
+      latitude: "",
+      longitude: "",
       latitude_akhir: "",
       longitude_akhir: "",
       dataDestinasi: [],
@@ -94,8 +107,22 @@ export default {
       jam_mulai: "",
       menit_mulai: "",
       tanggal: "",
+      gettingLocation: false,
+      location:null,
+      errorStr:null,
+      noLocation: false,
+      coodinates: null,
+      waypoints: [],
       url: "https://travel-main-proccess.herokuapp.com/"
     }
+  },
+
+  components: {
+    Coba
+  },
+
+  mounted(){
+    
   },
 
   methods:{
@@ -134,11 +161,34 @@ export default {
       newComponent.append('data', JSON.stringify(this.selectedDestination))
       newComponent.append('latitude', this.latitude)
       newComponent.append('longitude', this.longitude)
-       newComponent.append('latitude_akhir', this.latitude_akhir)
+      newComponent.append('latitude_akhir', this.latitude_akhir)
       newComponent.append('longitude_akhir', this.longitude_akhir)
       newComponent.append('jam_mulai', this.jam_mulai)
       newComponent.append('menit_mulai', this.menit_mulai)
       newComponent.append('tanggal', this.tanggal)
+
+      // this.waypoints = this.dataDestinasi.find(x => x._id === '5e13d7fdca88dc2cac42a047').location;
+      /* eslint-disable no-console */
+      // console.log(this.waypoints);
+      /* eslint-enable no-console */
+
+      for (let index = 0; index < this.selectedDestination.length; index++) {
+          let coord = this.dataDestinasi.find(x => x._id === this.selectedDestination[index].destinasi).location;
+          
+          this.waypoints.push({
+            location: new google.maps.LatLng(coord.latitude, coord.longitude),
+            stopover: true
+          });
+      }
+
+      this.$refs.map.$mapPromise.then((map) => {
+          this.getRoute();
+      })
+
+      /* eslint-disable no-console */
+      console.log(this.waypoints);
+      /* eslint-enable no-console */
+
 
       axios.post(this.url+"main", newComponent)
         .then((response) => {
@@ -167,15 +217,40 @@ export default {
       this.longitude = "112.70264024097918";
     },
 
-    onChangeDestinasi(event) {
-      // console.log(this.dataDestinasi[0])
-      // for (let index = 0; index < this.dataDestinasi.length; index++) {
-      //   if (this.dataDestinasi[index]['tempat'] == event.target.value) {
-      //     this.dataDestinasi.splice(index, 1);
-      //   }
-        
-      // }
-    }
+
+    geolocation() {
+      navigator.geolocation.getCurrentPosition(this.buildUrl, this.geoError);
+    },
+    buildUrl(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      this.latitude = position.coords.latitude;
+      this.longitude = position.coords.longitude;
+    },
+    geoError(error) {
+      console.log("error");
+    },
+
+    getRoute() {
+      this.directionsService = new google.maps.DirectionsService()
+      this.directionsDisplay = new google.maps.DirectionsRenderer()
+      this.directionsDisplay.setMap(this.$refs.map.$mapObject)
+      var vm = this
+      vm.directionsService.route({
+          origin: new google.maps.LatLng(this.latitude, this.longitude),
+          waypoints: this.waypoints,
+          destination: new google.maps.LatLng(this.latitude_akhir, this.longitude_akhir),
+          travelMode: 'DRIVING'
+      }, function (response, status) {
+          if (status === 'OK') {
+          vm.directionsDisplay.setDirections(response)
+          } else {
+          console.log('Directions request failed due to ' + status)
+          }
+      })
+  }
+
+    
   }
 }
 </script>
