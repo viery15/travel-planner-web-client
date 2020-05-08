@@ -86,8 +86,8 @@
 <script>
 import axios from 'axios'
 import 'vue-loading-overlay/dist/vue-loading.css'
-import Coba from '../components/Coba';
 import {gmapApi} from 'vue2-google-maps'
+// import RouteMaps from '../components/main/RouteMaps'
 
 export default {
   name: 'home',
@@ -118,7 +118,7 @@ export default {
   },
 
   components: {
-    Coba
+    // RouteMaps
   },
 
   mounted(){
@@ -167,11 +167,6 @@ export default {
       newComponent.append('menit_mulai', this.menit_mulai)
       newComponent.append('tanggal', this.tanggal)
 
-      // this.waypoints = this.dataDestinasi.find(x => x._id === '5e13d7fdca88dc2cac42a047').location;
-      /* eslint-disable no-console */
-      // console.log(this.waypoints);
-      /* eslint-enable no-console */
-
       for (let index = 0; index < this.selectedDestination.length; index++) {
           let coord = this.dataDestinasi.find(x => x._id === this.selectedDestination[index].destinasi).location;
           
@@ -184,11 +179,6 @@ export default {
       this.$refs.map.$mapPromise.then((map) => {
           this.getRoute();
       })
-
-      /* eslint-disable no-console */
-      console.log(this.waypoints);
-      /* eslint-enable no-console */
-
 
       axios.post(this.url+"main", newComponent)
         .then((response) => {
@@ -248,7 +238,7 @@ export default {
           console.log('Directions request failed due to ' + status)
           }
       })
-  }
+    }
 
     
   }
