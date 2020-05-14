@@ -2,7 +2,7 @@
     <div>
         <InputForm />
         
-        <ItineraryResult ref="a" />
+        <ItineraryResult />
     </div>
 </template>
 
