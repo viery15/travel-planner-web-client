@@ -149,7 +149,10 @@ export default {
     },
 
     geoError() {
+      /* eslint-disable no-console */
+
       console.log("error");
+      /* eslint-enable no-console */
     },
 
     async getDestination() {
@@ -160,11 +163,12 @@ export default {
       axios
         .post(this.url, newComponent)
         .then((response) => {
-          console.log(response);
           this.$store.dispatch("updateDestinasi", response.data.response);
         })
         .catch((e) => {
+          /* eslint-disable no-console */
           console.log(e);
+          /* eslint-enable no-console */
         });
     },
 
@@ -183,10 +187,11 @@ export default {
         .post(this.url + "main", newComponent)
         .then((response) => {
           this.$store.dispatch("addDataItinerary", response.data);
-          console.log(response.data);
         })
         .catch((e) => {
+          /* eslint-disable no-console */
           console.log(e);
+          /* eslint-enable no-console */
         });
     },
   },

@@ -1,246 +1,233 @@
 <template>
-  <div class="home">
-    <br><br>
-    <div class="row">
-      <div class="col-md-6">
-          <div class="form-group">
-            <label for="coordinate">Tanggal:</label><br>
-            <input type="date" class="form-control" v-model="tanggal">
+  <div>
+    <div class="row" style="margin-top: 30px;">
+      <div
+        class="col-md-6 mx-auto"
+        style="border: 1px solid grey; padding: 20px; border-radius: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.51);"
+      >
+        <div class="form-group">
+          <label for="coordinate">Lokasi Awal:</label>
+          <div class="row">
+            <div class="col-md-9">
+              <vue-google-autocomplete
+                ref="alamat"
+                id="map"
+                classname="form-control"
+                placeholder="Masukkan lokasi awal anda"
+                v-on:placechanged="getAddressData"
+                :country="['id']"
+                v-model="lokasiAwal"
+              >
+              </vue-google-autocomplete>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-sm btn-success" v-on:click="geolocation()">
+                Locate Me
+              </button>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="coordinate">Titik awal:</label><br>
-            <input type="text" class="form-control" v-model="latitude" style="width:30%; float:left; margin-right:2%">
-            <input type="text" class="form-control" v-model="longitude" style="width:30%; margin-right:2%">
-            <button class="btn btn-sm btn-primary" v-on:click="titikPens()">PENS</button>
-            <button class="btn btn-sm btn-primary" v-on:click="titikMalang()">Malang</button>
-            <button class="btn btn-sm btn-success" v-on:click="geolocation()">Locate Me</button>
+        </div>
+        <div class="form-group">
+          <label for="coordinate">Tanggal Mulai Wisata:</label><br />
+          <input type="date" class="form-control" v-model="tanggalAwal" />
+        </div>
+        <div class="form-group">
+          <label for="coordinate">Tanggal Selesai Wisata:</label><br />
+          <input type="date" class="form-control" v-model="tanggalAkhir" />
+        </div>
+        <div class="form-group">
+          <label for="kategori">Kategori yang anda inginkan:</label><br />
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              v-model="kategori"
+              value="Air Terjun"
+            />
+            <label class="form-check-label" for="defaultCheck1">
+              Air Terjun
+            </label>
           </div>
-           <div class="form-group">
-            <label for="coordinate">Titik akhir:</label><br>
-            <input type="text" class="form-control" v-model="latitude_akhir" style="width:30%; float:left; margin-right:2%">
-            <input type="text" class="form-control" v-model="longitude_akhir" style="width:30%; margin-right:2%">
-            <button class="btn btn-sm btn-primary" v-on:click="titikAkhir()">Titik awal</button>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              v-model="kategori"
+              value="Taman Hiburan"
+            />
+            <label class="form-check-label" for="defaultCheck1">
+              Taman Hiburan
+            </label>
           </div>
-          <div class="form-group">
-            <label for="coordinate">Jam Mulai:</label><br>
-            <input type="number" class="form-control" v-model="jam_mulai" style="width:15%; float:left">
-            <input type="number" class="form-control" v-model="menit_mulai" style="width:15%">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              v-model="kategori"
+              value="Museum"
+            />
+            <label class="form-check-label" for="defaultCheck1">
+              Museum
+            </label>
           </div>
-          <button v-on:click="getDestination();" type="button" class="btn btn-primary">Submit</button><br><br>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              v-model="kategori"
+              value="Edukasi"
+            />
+            <label class="form-check-label" for="defaultCheck1">
+              Edukasi
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              v-model="kategori"
+              value="Religi"
+            />
+            <label class="form-check-label" for="defaultCheck1">
+              Religi
+            </label>
+          </div>
+        </div>
+        <button
+          class="btn btn-sm btn-primary"
+          style="width: 100%"
+          v-on:click="submit()"
+        >
+          Sumbit
+        </button>
       </div>
     </div>
-    <div v-for="(selectDestination, index) in selectedDestination" v-bind:key="selectDestination.number" class="row">
-      <div class="col-md-6">
-        <h3>Destinasi {{index+1}}</h3>
-        <div class="form-group" style="width:60%; float:left;">
-          <label for="sel1">Destinasi: </label>
-          <select v-on:change="onChangeDestinasi($event)" class="form-control" v-model="selectDestination.destinasi">
-            <option value="" disabled selected>Destinasi Wisata</option>
-            <option v-for='destinasi in dataDestinasi' v-bind:key="destinasi._id" v-bind:value="destinasi._id">{{destinasi.tempat}}</option>
-          </select>
-        </div>
-        <div class="form-group" style="width:35%; float:right; ">
-          <label for="coordinate">Lama Stay (Jam):</label><br>
-          <input type="number" class="form-control" v-model="selectDestination.lama_stay">
-        </div>
-        <br><br><br>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="text-center" style="clear:both">
-          <button v-on:click="addDestination()" class="btn btn-success btn-sm center" id="btnTambahDestinasi" style="display:none"><font-awesome-icon icon="plus"/></button>
-        </div>
-      </div>
-    </div>
-    <br>
-    <button v-on:click="submit()" type="button" class="btn btn-primary" style="width:100%">Submit</button>
-    <br><br><br>
-    <GmapMap  ref="map" style="width: '100%; height: 300px;" :zoom="1" :center="{lat: 0, lng: 0}"></GmapMap>
-    <br><br><br>
 
-    <table class="table table-bordered table-hover">
-      <tr>
-        <th>Waktu</th>
-        <th>Keterangan</th>
-        <th>Perkiraan Cuaca</th>
-        <th>Status</th>
-      </tr>
-      <tr v-for="(tempat, index) in res.response" v-bind:key="index">
-        <td>{{tempat.waktu}}</td>
-        <td>{{tempat.nama}}</td>
-        <th>{{tempat.cuaca}}</th>
-        <th>{{tempat.status}}</th>
-      </tr>
-    </table>
-    <div v-if="location">
-    Your location data is {{ location.coords.latitude }}, {{ location.coords.longitude}}
-  </div>
+    <div class="row">
+      <div
+        class="col-md-12"
+        v-for="(hari, indexHari) in dataItinerary.response"
+        v-bind:key="indexHari"
+      >
+        <br /><br />
+        <h2>Hari ke - {{ indexHari + 1 }}</h2>
+        <table
+          class="table table-primary table-bordered"
+          style="margin-top: 20px"
+        >
+          <tr style="background-color: #007bff; color: #fff6ff">
+            <th class="text-center">Waktu</th>
+            <th class="text-center">Keterangan</th>
+            <th class="text-center">Perkiraan Cuaca</th>
+            <th class="text-center">Status</th>
+          </tr>
+          <tr v-for="(tempat, index) in hari" v-bind:key="index">
+            <td>{{ tempat.waktu }}</td>
+            <td>{{ tempat.keterangan }}</td>
+            <th>{{ tempat.cuaca }}</th>
+            <th>{{ tempat.status }}</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <p v-if="dataItinerary != ''">
+      <i
+        >*Sumber perkiraan cuaca berasa dari
+        <a href="https://openweathermap.org/" target="_blank"
+          ><b>openwheatermap.org</b></a
+        ></i
+      >
+    </p>
   </div>
 </template>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAnpBN3XcUxdUV56dXxTfuhHBvEySitlY&callback=initMap">
-</script>
 
 <script>
-import axios from 'axios'
-import 'vue-loading-overlay/dist/vue-loading.css'
-import {gmapApi} from 'vue2-google-maps'
-// import RouteMaps from '../components/main/RouteMaps'
+import axios from "axios";
+import "vue-loading-overlay/dist/vue-loading.css";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 
 export default {
-  name: 'home',
-  directionsService: null,
-  directionsDisplay: null,
-  data(){
+  components: { VueGoogleAutocomplete },
+  name: "home",
+  data() {
     return {
-      latitude: "",
-      longitude: "",
-      latitude_akhir: "",
-      longitude_akhir: "",
-      dataDestinasi: [],
-      selectedDestination:[],
-      res: "",
-      pens_latitude: "-7.276420",
-      pens_longitude: "112.793199",
-      jam_mulai: "",
-      menit_mulai: "",
-      tanggal: "",
-      gettingLocation: false,
-      location:null,
-      errorStr:null,
-      noLocation: false,
-      coodinates: null,
-      waypoints: [],
-      url: "https://travel-main-proccess.herokuapp.com/"
-    }
+      kategori: [],
+      tanggalAwal: "",
+      tanggalAkhir: "",
+      dataItinerary: "",
+      userLocation: {
+        latitude: "-7.942637178081287",
+        longitude: "112.70264024097918",
+      },
+      url: "http://127.0.0.1:3000/",
+      lokasiAwal: "",
+    };
   },
 
-  components: {
-    // RouteMaps
-  },
-
-  mounted(){
-    
-  },
-
-  methods:{
-    async getDestination(){
-      const newComponent = new URLSearchParams()
-      newComponent.append('latitude', this.latitude)
-      newComponent.append('longitude', this.longitude)
-
-      axios.post(this.url, newComponent)
-        .then((response) => {
-            this.dataDestinasi = response.data.response;
-            this.selectedDestination.push({
-              number: this.selectedDestination.length + 1,
-              destinasi: "",
-              lama_stay: ""
-            });
-            $("#btnTambahDestinasi").show();
-        })
-        .catch((e) => {
-            /* eslint-disable no-console */
-            console.log(e)
-            /* eslint-enable no-console */
-        })
+  methods: {
+    getAddressData: function(addressData, placeResultData, id) {
+      this.lokasiAwal = addressData;
+      this.userLocation.latitude = addressData.latitude;
+      this.userLocation.longitude = addressData.longitude;
     },
-
-    addDestination(){
-      this.selectedDestination.push({
-        number: this.selectedDestination.length + 1,
-        destinasi: "",
-        lama_stay: ""
+    submit() {
+      let loader = this.$loading.show({
+        container: this.fullPage ? null : this.$refs.formContainer,
+        canCancel: false,
       });
-    },
-
-    submit(){
-      const newComponent = new URLSearchParams()
-      newComponent.append('data', JSON.stringify(this.selectedDestination))
-      newComponent.append('latitude', this.latitude)
-      newComponent.append('longitude', this.longitude)
-      newComponent.append('latitude_akhir', this.latitude_akhir)
-      newComponent.append('longitude_akhir', this.longitude_akhir)
-      newComponent.append('jam_mulai', this.jam_mulai)
-      newComponent.append('menit_mulai', this.menit_mulai)
-      newComponent.append('tanggal', this.tanggal)
-
-      for (let index = 0; index < this.selectedDestination.length; index++) {
-          let coord = this.dataDestinasi.find(x => x._id === this.selectedDestination[index].destinasi).location;
-          
-          this.waypoints.push({
-            location: new google.maps.LatLng(coord.latitude, coord.longitude),
-            stopover: true
-          });
+      const newComponent = new URLSearchParams();
+      newComponent.append("latitude", this.userLocation.latitude);
+      newComponent.append("longitude", this.userLocation.longitude);
+      for (let index = 0; index < this.kategori.length; index++) {
+        newComponent.append("kategori", this.kategori[index]);
       }
+      newComponent.append("tanggalMulai", this.tanggalAwal);
+      newComponent.append("tanggalAkhir", this.tanggalAkhir);
 
-      this.$refs.map.$mapPromise.then((map) => {
-          this.getRoute();
-      })
-
-      axios.post(this.url+"main", newComponent)
+      axios
+        .post(this.url + "mainfeature", newComponent)
         .then((response) => {
-            this.res = response.data
+          loader.hide();
+          this.dataItinerary = response.data;
         })
         .catch((e) => {
-            /* eslint-disable no-console */
-            console.log(e)
-            /* eslint-enable no-console */
-        })
-
+          /* eslint-disable no-console */
+          console.log(e);
+          /* eslint-enable no-console */
+        });
     },
-
-    titikAkhir(){
-      this.latitude_akhir = this.latitude;
-      this.longitude_akhir = this.longitude;
-    },
-
-    titikPens(){
-      this.latitude = this.pens_latitude;
-      this.longitude = this.pens_longitude;
-    },
-
-    titikMalang(){
-      this.latitude = "-7.942637178081287";
-      this.longitude = "112.70264024097918";
-    },
-
-
     geolocation() {
       navigator.geolocation.getCurrentPosition(this.buildUrl, this.geoError);
     },
+
     buildUrl(position) {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      this.latitude = position.coords.latitude;
-      this.longitude = position.coords.longitude;
+      this.userLocation.latitude = position.coords.latitude;
+      this.userLocation.longitude = position.coords.longitude;
+      axios
+        .get(
+          "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+            position.coords.latitude +
+            "," +
+            position.coords.longitude +
+            "&key=AIzaSyBAnpBN3XcUxdUV56dXxTfuhHBvEySitlY"
+        )
+        .then((response) => {
+          this.$refs.alamat.update(response.data.results[0].formatted_address);
+        })
+        .catch((e) => {
+          /* eslint-disable no-console */
+          console.log(e);
+          /* eslint-enable no-console */
+        });
     },
-    geoError(error) {
+
+    geoError() {
+      /* eslint-disable no-console */
+
       console.log("error");
+      /* eslint-enable no-console */
     },
-
-    getRoute() {
-      this.directionsService = new google.maps.DirectionsService()
-      this.directionsDisplay = new google.maps.DirectionsRenderer()
-      this.directionsDisplay.setMap(this.$refs.map.$mapObject)
-      var vm = this
-      vm.directionsService.route({
-          origin: new google.maps.LatLng(this.latitude, this.longitude),
-          waypoints: this.waypoints,
-          destination: new google.maps.LatLng(this.latitude_akhir, this.longitude_akhir),
-          travelMode: 'DRIVING'
-      }, function (response, status) {
-          if (status === 'OK') {
-          vm.directionsDisplay.setDirections(response)
-          } else {
-          console.log('Directions request failed due to ' + status)
-          }
-      })
-    }
-
-    
-  }
-}
+  },
+};
 </script>
