@@ -130,7 +130,7 @@
         </table>
       </div>
     </div>
-    <p v-if="dataItinerary != ''">
+    <p v-if="dataItinerary != '' && dataItinerary.response.length != 0">
       <i
         >*Sumber perkiraan cuaca berasa dari
         <a href="https://openweathermap.org/" target="_blank"
@@ -138,6 +138,10 @@
         ></i
       >
     </p>
+    <div style="text-align: center">
+
+    <h2 style="margin-top: 70px; margin-bottom: 70px" v-if="dataItinerary != '' && dataItinerary.response.length == 0"> Itinerary tidak ditemukan </h2>
+    </div>
   </div>
 </template>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -161,6 +165,8 @@ export default {
         longitude: "112.70264024097918",
       },
       url: "http://127.0.0.1:3000/",
+      // url: "https://travel-main-proccess.herokuapp.com/",
+
       lokasiAwal: "",
     };
   },
