@@ -103,6 +103,13 @@
       </div>
     </div>
 
+    <GmapMap
+      ref="map"
+      style="width: '100%; height: 300px;"
+      :zoom="1"
+      :center="{ lat: 0, lng: 0 }"
+    ></GmapMap>
+
     <div class="row">
       <div
         class="col-md-12"
@@ -139,8 +146,12 @@
       >
     </p>
     <div style="text-align: center">
-
-    <h2 style="margin-top: 70px; margin-bottom: 70px" v-if="dataItinerary != '' && dataItinerary.response.length == 0"> Itinerary tidak ditemukan </h2>
+      <h2
+        style="margin-top: 70px; margin-bottom: 70px"
+        v-if="dataItinerary != '' && dataItinerary.response.length == 0"
+      >
+        Itinerary tidak ditemukan
+      </h2>
     </div>
   </div>
 </template>
@@ -160,6 +171,7 @@ export default {
       tanggalAwal: "",
       tanggalAkhir: "",
       dataItinerary: "",
+      waypoints: "",
       userLocation: {
         latitude: "-7.942637178081287",
         longitude: "112.70264024097918",
@@ -169,6 +181,16 @@ export default {
 
       lokasiAwal: "",
     };
+  },
+
+  mounted() {
+    
+  },
+
+  watch: {
+    dataItinerary: function(val) {
+      this.getRoute();
+    },
   },
 
   methods: {
@@ -233,6 +255,56 @@ export default {
 
       console.log("error");
       /* eslint-enable no-console */
+    },
+
+    async getRoute() {
+      this.waypoints = await this.setWaypoints(this.dataItinerary.response[0]);
+      console.log(this.waypoints[this.waypoints.length - 1].location);
+      let destination = this.waypoints[this.waypoints.length - 1].location;
+      this.waypoints.splice(this.waypoints.length - 1, 1);
+      // await this.resetMap();
+      this.$refs.map.$mapPromise.then((map) => {
+        this.directionsService = new google.maps.DirectionsService();
+        this.directionsDisplay = new google.maps.DirectionsRenderer();
+
+        this.directionsDisplay.setMap(this.$refs.map.$mapObject);
+        var vm = this;
+        vm.directionsService.route(
+          {
+            origin: new google.maps.LatLng(
+              "-7.942637178081287",
+              "112.70264024097918"
+            ),
+            waypoints: this.waypoints,
+            destination: destination,
+            travelMode: "DRIVING",
+          },
+          function(response, status) {
+            if (status === "OK") {
+              vm.directionsDisplay.setDirections(response);
+            } else {
+              console.log("Directions request failed due to " + status);
+            }
+          }
+        );
+      });
+    },
+
+    setWaypoints(data) {
+      let waypoints = [];
+      for (let index = 0; index < data.length; index++) {
+        if (data[index].location != undefined) {
+          waypoints.push({
+            location: new google.maps.LatLng(
+              data[index].location.latitude,
+              data[index].location.longitude
+            ),
+            stopover: true,
+          });
+        }
+      }
+
+      return waypoints;
     },
   },
 };
