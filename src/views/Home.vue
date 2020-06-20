@@ -103,12 +103,27 @@
       </div>
     </div>
 
-    <GmapMap
-      ref="map"
-      style="width: '100%; height: 300px;"
-      :zoom="1"
-      :center="{ lat: 0, lng: 0 }"
-    ></GmapMap>
+    <div
+      class="modal fade bd-example-modal-lg"
+      id="modalMap"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myLargeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <GmapMap
+            v-if="showMaps"
+            ref="map"
+            style="width: '50%; height: 300px;"
+            :zoom="5"
+            :center="{ lat: 10, lng: 10 }"
+            :minZoom="8"
+          ></GmapMap>
+        </div>
+      </div>
+    </div>
 
     <div class="row">
       <div
@@ -118,6 +133,14 @@
       >
         <br /><br />
         <h2>Hari ke - {{ indexHari + 1 }}</h2>
+        <br /><br />
+        <button
+          class="btn btn-info"
+          v-on:click="getMap(indexHari)"
+        >
+          Tampilkan Rute
+        </button>
+
         <table
           class="table table-primary table-bordered"
           style="margin-top: 20px"
@@ -161,6 +184,7 @@
 import axios from "axios";
 import "vue-loading-overlay/dist/vue-loading.css";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
+import { loaded } from "vue2-google-maps";
 
 export default {
   components: { VueGoogleAutocomplete },
@@ -168,8 +192,11 @@ export default {
   data() {
     return {
       kategori: [],
+      gmap: "map",
+      showMaps: true,
       tanggalAwal: "",
       tanggalAkhir: "",
+      zoomMap: 8,
       dataItinerary: "",
       waypoints: "",
       userLocation: {
@@ -183,13 +210,11 @@ export default {
     };
   },
 
-  mounted() {
-    
-  },
+  mounted() {},
 
   watch: {
     dataItinerary: function(val) {
-      this.getRoute();
+      // this.getRoute();
     },
   },
 
@@ -199,6 +224,7 @@ export default {
       this.userLocation.latitude = addressData.latitude;
       this.userLocation.longitude = addressData.longitude;
     },
+
     submit() {
       let loader = this.$loading.show({
         container: this.fullPage ? null : this.$refs.formContainer,
@@ -257,23 +283,22 @@ export default {
       /* eslint-enable no-console */
     },
 
-    async getRoute() {
-      this.waypoints = await this.setWaypoints(this.dataItinerary.response[0]);
-      console.log(this.waypoints[this.waypoints.length - 1].location);
+    async getRoute(indexData) {
+      this.showMaps = false;
+      this.waypoints = await this.setWaypoints(this.dataItinerary.response[indexData]);
+      await this.resetMap();
       let destination = this.waypoints[this.waypoints.length - 1].location;
       this.waypoints.splice(this.waypoints.length - 1, 1);
-      // await this.resetMap();
       this.$refs.map.$mapPromise.then((map) => {
         this.directionsService = new google.maps.DirectionsService();
         this.directionsDisplay = new google.maps.DirectionsRenderer();
-
         this.directionsDisplay.setMap(this.$refs.map.$mapObject);
         var vm = this;
         vm.directionsService.route(
           {
             origin: new google.maps.LatLng(
-              "-7.942637178081287",
-              "112.70264024097918"
+              this.userLocation.latitude,
+              this.userLocation.longitude
             ),
             waypoints: this.waypoints,
             destination: destination,
@@ -306,6 +331,17 @@ export default {
 
       return waypoints;
     },
+
+    resetMap() {
+      this.showMaps = true;
+    },
+
+    async getMap(index){
+      $("#modalMap").modal("show");
+
+      await this.getRoute(index);
+    }
+
   },
 };
 </script>

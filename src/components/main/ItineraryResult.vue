@@ -1,12 +1,12 @@
 <template>
   <div style="margin-top: 30px; margin-bottom: 30px; display:none;" id="result">
-    <GmapMap
+    <!-- <GmapMap
       v-if="showMaps"
       ref="map"
       style="width: '100%; height: 300px;"
       :zoom="1"
       :center="{ lat: 0, lng: 0 }"
-    ></GmapMap>
+    ></GmapMap> -->
 
     <table class="table table-bordered table-hover" style="margin-top: 20px">
       <tr>
@@ -49,7 +49,7 @@ export default {
       $("#result").show();
     },
     dataItinerary: function(val) {
-      this.getRoute();
+      // this.getRoute();
     },
   },
 
