@@ -280,8 +280,8 @@ export default {
         longitude: "112.70264024097918",
       },
       modalDetail: "",
-      url: "http://127.0.0.1:3000/",
-      // url: "https://travel-main-proccess.herokuapp.com/",
+      // url: "http://127.0.0.1:3000/",
+      url: "https://travel-main-proccess.herokuapp.com/",
 
       lokasiAwal: "",
     };
