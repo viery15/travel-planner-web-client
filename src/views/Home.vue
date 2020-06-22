@@ -134,10 +134,7 @@
         <br /><br />
         <h2>Hari ke - {{ indexHari + 1 }}</h2>
         <br /><br />
-        <button
-          class="btn btn-info"
-          v-on:click="getMap(indexHari)"
-        >
+        <button class="btn btn-info" v-on:click="getMap(indexHari)">
           Tampilkan Rute
         </button>
 
@@ -150,16 +147,95 @@
             <th class="text-center">Keterangan</th>
             <th class="text-center">Perkiraan Cuaca</th>
             <th class="text-center">Status</th>
+            <th class="text-center">Action</th>
           </tr>
           <tr v-for="(tempat, index) in hari" v-bind:key="index">
             <td>{{ tempat.waktu }}</td>
             <td>{{ tempat.keterangan }}</td>
             <th>{{ tempat.cuaca }}</th>
             <th>{{ tempat.status }}</th>
+            <th class="text-center">
+              <button
+                class="btn btn-info btn-sm"
+                v-on:click="detailTujuan(tempat)"
+              >
+                <font-awesome-icon icon="eye" />
+              </button>
+            </th>
           </tr>
         </table>
       </div>
     </div>
+
+    <!-- Modal Detail Wisata -->
+    <div
+      class="modal fade"
+      id="detailModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              {{ modalDetail.nama }}
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-4">
+                Nama
+              </div>
+              <div class="col-md-8">
+                <b>{{ modalDetail.nama }}</b>
+              </div>
+            </div>
+            <hr>
+
+            <div class="row">
+              <div class="col-md-4">
+                Alamat
+              </div>
+              <div class="col-md-8">
+                <b>{{ modalDetail.alamat }}</b>
+              </div>
+            </div>
+            <hr>
+
+            <div class="row">
+              <div class="col-md-4">
+                Kategori
+              </div>
+              <div class="col-md-8">
+                <b>{{ modalDetail.kategori }}</b>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <p v-if="dataItinerary != '' && dataItinerary.response.length != 0">
       <i
         >*Sumber perkiraan cuaca berasa dari
@@ -203,6 +279,7 @@ export default {
         latitude: "-7.942637178081287",
         longitude: "112.70264024097918",
       },
+      modalDetail: "",
       url: "http://127.0.0.1:3000/",
       // url: "https://travel-main-proccess.herokuapp.com/",
 
@@ -285,7 +362,9 @@ export default {
 
     async getRoute(indexData) {
       this.showMaps = false;
-      this.waypoints = await this.setWaypoints(this.dataItinerary.response[indexData]);
+      this.waypoints = await this.setWaypoints(
+        this.dataItinerary.response[indexData]
+      );
       await this.resetMap();
       let destination = this.waypoints[this.waypoints.length - 1].location;
       this.waypoints.splice(this.waypoints.length - 1, 1);
@@ -336,12 +415,16 @@ export default {
       this.showMaps = true;
     },
 
-    async getMap(index){
+    async getMap(index) {
       $("#modalMap").modal("show");
 
       await this.getRoute(index);
-    }
+    },
 
+    detailTujuan(tujuan) {
+      this.modalDetail = tujuan;
+      $("#detailModal").modal("show");
+    },
   },
 };
 </script>
