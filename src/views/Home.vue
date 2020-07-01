@@ -191,7 +191,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" style="word-break: break-all;">
             <div class="row">
               <div class="col-md-4">
                 Nama
@@ -220,18 +220,29 @@
                 <b>{{ modalDetail.kategori }}</b>
               </div>
             </div>
+            <hr>
+
+            <div class="row">
+              <div class="col-md-4">
+                Nilai Sentiment
+              </div>
+              <div class="col-md-8">
+                <b>{{ modalDetail.sentimentScore }}</b>
+              </div>
+            </div>
+            <hr>
+
+            <div class="row">
+              <div class="col-md-4">
+                Sumber
+              </div>
+              <div class="col-md-8">
+                <a :href="modalDetail.url" target="_blank"><b>Google Places</b></a>
+              </div>
+            </div>
 
           </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
+          
         </div>
       </div>
     </div>
@@ -280,8 +291,8 @@ export default {
         longitude: "112.70264024097918",
       },
       modalDetail: "",
-      // url: "http://127.0.0.1:3000/",
-      url: "https://travel-main-proccess.herokuapp.com/",
+      url: "http://127.0.0.1:3000/",
+      // url: "https://travel-main-proccess.herokuapp.com/",
 
       lokasiAwal: "",
     };
