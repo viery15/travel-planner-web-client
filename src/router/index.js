@@ -29,7 +29,7 @@ const routes = [
     component: MainFeature
   },
   {
-    path: '/review/:tempat', 
+    path: '/review/:id', 
     name: 'review', 
     component: Review
  }

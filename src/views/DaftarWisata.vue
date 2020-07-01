@@ -9,11 +9,11 @@
       <div slot="action" slot-scope="props">
         <button
           v-on:click="detail(props.row)"
-          style="margin-left:5px"
+          style="margin-left:10%"
           type="button"
           class="btn btn-info btn-sm"
         >
-          <font-awesome-icon icon="eye" />
+          <font-awesome-icon icon="eye" /> Detail
         </button>
       </div>
     </v-client-table>
@@ -113,7 +113,7 @@
                   }}</span>
                   dari 100 orang menilai positif</b
                 ><br /><br />
-                <router-link target="_blank" class="btn btn-sm btn-success" :to="{ name: 'review', params: {tempat: modalDetail.tempat } }">Lihat Review</router-link>
+                <router-link target="_blank" class="btn btn-sm btn-success" :to="{ name: 'review', params: {id: modalDetail._id} }">Lihat Review</router-link>
               </div>
             </div>
             <hr />
