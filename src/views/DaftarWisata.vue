@@ -112,9 +112,8 @@
                     modalDetail.sentiment_score
                   }}</span>
                   dari 100 orang menilai positif</b
-                ><br /><br /><button class="btn btn-sm btn-success">
-                  Lihat Review
-                </button>
+                ><br /><br />
+                <router-link target="_blank" class="btn btn-sm btn-success" :to="{ name: 'review', params: {tempat: modalDetail.tempat } }">Lihat Review</router-link>
               </div>
             </div>
             <hr />
@@ -190,7 +189,6 @@ export default {
       });
 
       this.modalDetail.jam_buka = result;
-      console.log(this.modalDetail.jam_buka);
 
         $("#detail").modal("show");
     },

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import MainFeature from '../views/MainFeature.vue'
 import DaftarWisata from '../views/DaftarWisata.vue'
+import Review from '../views/Review.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     name: 'MainFeature',
     component: MainFeature
   },
+  {
+    path: '/review/:tempat', 
+    name: 'review', 
+    component: Review
+ }
 
 ]
 
