@@ -35,64 +35,134 @@
           <label for="coordinate">Tanggal Selesai Wisata:</label><br />
           <input type="date" class="form-control" v-model="tanggalAkhir" />
         </div>
-        <div class="form-group">
-          <label for="kategori">Kategori yang anda inginkan:</label><br />
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              v-model="kategori"
-              value="Air Terjun"
-            />
-            <label class="form-check-label" for="defaultCheck1">
-              Air Terjun
-            </label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              v-model="kategori"
-              value="Taman Hiburan"
-            />
-            <label class="form-check-label" for="defaultCheck1">
-              Taman Hiburan
-            </label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              v-model="kategori"
-              value="Museum"
-            />
-            <label class="form-check-label" for="defaultCheck1">
-              Museum
-            </label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              v-model="kategori"
-              value="Edukasi"
-            />
-            <label class="form-check-label" for="defaultCheck1">
-              Edukasi
-            </label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              v-model="kategori"
-              value="Religi"
-            />
-            <label class="form-check-label" for="defaultCheck1">
-              Religi
-            </label>
+        <div class="row">
+          <div class="col-md-12">
+            Pilih kategori yang anda inginkan :
           </div>
         </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Air Terjun"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Air Terjun
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Taman Hiburan"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Taman Hiburan
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Museum"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Museum
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Edukasi"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Edukasi
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Religi"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Religi
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Taman"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Taman
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Rekreasi Air"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Rekreasi Air
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Pantai"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Pantai
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Taman Kota"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Taman Kota
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="kategori"
+                  value="Kebun Binatang"
+                />
+                <label class="form-check-label" for="defaultCheck1">
+                  Kebun Binatang
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <button
           class="btn btn-sm btn-primary"
           style="width: 100%"
@@ -143,11 +213,11 @@
           style="margin-top: 20px"
         >
           <tr style="background-color: #007bff; color: #fff6ff">
-            <th class="text-center">Waktu</th>
+            <th class="text-center" style="width:13%">Waktu</th>
             <th class="text-center">Keterangan</th>
             <th class="text-center">Perkiraan Cuaca</th>
             <th class="text-center">Status</th>
-            <th class="text-center">Action</th>
+            <th class="text-center" style="width:13%">Action</th>
           </tr>
           <tr v-for="(tempat, index) in hari" v-bind:key="index">
             <td>{{ tempat.waktu }}</td>
@@ -156,11 +226,20 @@
             <th>{{ tempat.status }}</th>
             <th class="text-center">
               <button
+                v-if="tempat.rute == undefined"
                 class="btn btn-info btn-sm"
                 v-on:click="detailTujuan(tempat)"
               >
-                <font-awesome-icon icon="eye" />
+                <font-awesome-icon icon="eye" /> Detail
               </button>
+              <a
+                :href="tempat.rute"
+                v-if="tempat.rute != undefined"
+                class="btn btn-success btn-sm"
+                target="_blank"
+              >
+                Lihat Rute
+              </a>
             </th>
           </tr>
         </table>
@@ -200,7 +279,7 @@
                 <b>{{ modalDetail.nama }}</b>
               </div>
             </div>
-            <hr>
+            <hr />
 
             <div class="row">
               <div class="col-md-4">
@@ -210,7 +289,7 @@
                 <b>{{ modalDetail.alamat }}</b>
               </div>
             </div>
-            <hr>
+            <hr />
 
             <div class="row">
               <div class="col-md-4">
@@ -220,29 +299,40 @@
                 <b>{{ modalDetail.kategori }}</b>
               </div>
             </div>
-            <hr>
+            <hr />
 
             <div class="row">
               <div class="col-md-4">
                 Nilai Sentiment
               </div>
               <div class="col-md-8">
-                <b>{{ modalDetail.sentimentScore }}</b>
+                <b
+                  ><span style="color:green">{{
+                    modalDetail.sentimentScore
+                  }}</span>
+                  dari 100 orang menilai positif</b
+                ><br /><br />
+                <router-link
+                  target="_blank"
+                  class="btn btn-sm btn-success"
+                  :to="{ name: 'review', params: { id: modalDetail._id } }"
+                  >Lihat Review</router-link
+                >
               </div>
             </div>
-            <hr>
+            <hr />
 
             <div class="row">
               <div class="col-md-4">
                 Sumber
               </div>
               <div class="col-md-8">
-                <a :href="modalDetail.url" target="_blank"><b>Google Places</b></a>
+                <a :href="modalDetail.url" target="_blank"
+                  ><b>Google Places</b></a
+                >
               </div>
             </div>
-
           </div>
-          
         </div>
       </div>
     </div>
