@@ -168,7 +168,7 @@
           style="width: 100%"
           v-on:click="submit()"
         >
-          Sumbit
+          Submit
         </button>
       </div>
     </div>
@@ -307,9 +307,9 @@
               </div>
               <div class="col-md-8">
                 <b
-                  ><span style="color:green">{{
+                  >{{
                     modalDetail.sentimentScore
-                  }}</span>
+                  }}
                   dari 100 orang menilai positif</b
                 ><br /><br />
                 <router-link
@@ -381,8 +381,8 @@ export default {
         longitude: "112.70264024097918",
       },
       modalDetail: "",
-      url: "http://127.0.0.1:3000/",
-      // url: "https://travel-main-proccess.herokuapp.com/",
+      // url: "http://127.0.0.1:3000/",
+      url: "https://travel-main-proccess.herokuapp.com/",
 
       lokasiAwal: "",
     };

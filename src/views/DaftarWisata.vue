@@ -108,9 +108,9 @@
               </div>
               <div class="col-md-8">
                 <b
-                  ><span style="color:green">{{
+                  >{{
                     modalDetail.sentiment_score
-                  }}</span>
+                  }}
                   dari 100 orang menilai positif</b
                 ><br /><br />
                 <router-link target="_blank" class="btn btn-sm btn-success" :to="{ name: 'review', params: {id: modalDetail._id} }">Lihat Review</router-link>
@@ -146,7 +146,8 @@ export default {
   name: "DaftarWisata",
   data() {
     return {
-      url: "http://127.0.0.1:3000/",
+      // url: "http://127.0.0.1:3000/",
+      url: "https://travel-main-proccess.herokuapp.com/",
       dataWisata: [],
       modalDetail: "",
       columns: ["tempat", "alamat", "kota", "action"],
