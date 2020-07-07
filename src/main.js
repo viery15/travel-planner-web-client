@@ -21,6 +21,7 @@ import { ClientTable } from "vue-tables-2";
 import VueGeolocation from "vue-browser-geolocation";
 import * as VueGoogleMaps from "vue2-google-maps";
 import VModal from 'vue-js-modal'
+import './registerServiceWorker'
 Vue.use(VModal)
 
 Vue.use(VueGoogleMaps, {
