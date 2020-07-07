@@ -16,7 +16,10 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <router-link class="nav-link" to="/itinerary" style="color:white"
-            >Rencana Perjalanan</router-link
+            >Automatic itinerary</router-link
+          >
+          <router-link class="nav-link" to="/ManualItinerary" style="color:white"
+            >Manual itinerary</router-link
           >
           <router-link class="nav-link" to="/daftar_wisata" style="color:white"
             >Daftar Wisata</router-link

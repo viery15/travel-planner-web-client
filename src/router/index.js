@@ -4,11 +4,11 @@ import Home from '../views/Home.vue'
 import MainFeature from '../views/MainFeature.vue'
 import DaftarWisata from '../views/DaftarWisata.vue'
 import Review from '../views/Review.vue'
+import ManualItinerary from '../views/ManualItinerary.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'home',
     component: Home
@@ -29,10 +29,15 @@ const routes = [
     component: MainFeature
   },
   {
-    path: '/review/:id', 
-    name: 'review', 
+    path: '/review/:id',
+    name: 'review',
     component: Review
- }
+  },
+  {
+    path: '/ManualItinerary',
+    name: 'manual itinerary',
+    component: ManualItinerary
+  }
 
 ]
 
