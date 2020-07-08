@@ -80,7 +80,27 @@
       <h3>Rencana Perjalanan - {{tanggalAwal}}</h3>
       <button class="btn btn-info" v-on:click="getMap()">Tampilkan Rute</button>
 
-      <table class="table table-primary table-bordered" style="margin-top: 20px">
+      <v-client-table :data="dataItinerary.response" :columns="columns" :options="optionsTable">
+          <div slot="action" slot-scope="props">
+            <button
+              v-if="props.row.rute == undefined"
+              class="btn btn-info btn-sm"
+              v-on:click="detailTujuan(props.row)"
+            >
+              <font-awesome-icon icon="eye" />Detail
+            </button>
+
+            <a
+              :href="props.row.rute"
+              v-if="props.row.rute != undefined"
+              class="btn btn-success btn-sm"
+              target="_blank"
+            >Lihat Rute</a>
+
+          </div>
+        </v-client-table>
+
+      <!-- <table class="table table-primary table-bordered" style="margin-top: 20px">
         <tr style="background-color: #007bff; color: #fff6ff">
           <th class="text-center" style="width:13%">Waktu</th>
           <th class="text-center">Keterangan</th>
@@ -109,7 +129,8 @@
             >Lihat Rute</a>
           </th>
         </tr>
-      </table>
+      </table> -->
+
       <br />
       <br />
     </div>
@@ -257,6 +278,16 @@ export default {
       waktuMulai: "",
       dataItinerary: [],
       modalDetail: "",
+      columns: ["waktu", "keterangan", "cuaca", "status", "action"],
+      optionsTable: {
+        headings: {
+          waktu: "Waktu",
+          keterangan: "Keterangan",
+          cuaca: "Cuaca",
+          status: "Status",
+          action: "Action"
+        }
+      }
     };
   },
 

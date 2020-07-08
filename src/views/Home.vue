@@ -12,164 +12,45 @@
               <vue-google-autocomplete
                 ref="alamat"
                 id="map"
-                classname="form-control"
+                class="form-control"
+                types="establishment"
                 placeholder="Masukkan lokasi awal anda"
                 v-on:placechanged="getAddressData"
                 :country="['id']"
                 v-model="lokasiAwal"
-              >
-              </vue-google-autocomplete>
+              ></vue-google-autocomplete>
             </div>
             <div class="col-md-3">
-              <button class="btn btn-sm btn-success" v-on:click="geolocation()">
-                Locate Me
-              </button>
+              <button class="btn btn-sm btn-success" v-on:click="geolocation()">Locate Me</button>
             </div>
           </div>
         </div>
         <div class="form-group">
-          <label for="coordinate">Tanggal Mulai Wisata:</label><br />
+          <label for="coordinate">Tanggal Mulai Wisata:</label>
+          <br />
           <input type="date" class="form-control" v-model="tanggalAwal" />
         </div>
         <div class="form-group">
-          <label for="coordinate">Tanggal Selesai Wisata:</label><br />
+          <label for="coordinate">Tanggal Selesai Wisata:</label>
+          <br />
           <input type="date" class="form-control" v-model="tanggalAkhir" />
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            Pilih kategori yang anda inginkan :
-          </div>
-        </div>
-        
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Air Terjun"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Air Terjun
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Taman Hiburan"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Taman Hiburan
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Museum"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Museum
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Edukasi"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Edukasi
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Religi"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Religi
-                </label>
-              </div>
-            </div>
-          </div>
 
-          <div class="col-md-6">
-            <div class="form-group">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Taman"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Taman
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Rekreasi Air"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Rekreasi Air
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Pantai"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Pantai
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Taman Kota"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Taman Kota
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  v-model="kategori"
-                  value="Kebun Binatang"
-                />
-                <label class="form-check-label" for="defaultCheck1">
-                  Kebun Binatang
-                </label>
-              </div>
-            </div>
-          </div>
+        <div class="form-group">
+          <label for="coordinate">Pilih Kategori:</label>
+          <br />
+          <multiselect
+            v-model="kategori"
+            :options="listKategori"
+            :multiple="true"
+            :close-on-select="false"
+            :clear-on-select="false"
+            :preserve-search="true"
+            placeholder="Pilih Tujuan"
+          ></multiselect>
         </div>
 
-        <button
-          class="btn btn-sm btn-primary"
-          style="width: 100%"
-          v-on:click="submit()"
-        >
-          Submit
-        </button>
+        <button class="btn btn-sm btn-primary" style="width: 100%" v-on:click="submit()">Submit</button>
       </div>
     </div>
 
@@ -201,48 +82,33 @@
         v-for="(hari, indexHari) in dataItinerary.response"
         v-bind:key="indexHari"
       >
-        <br /><br />
+        <br />
+        <br />
         <h2>Hari ke - {{ indexHari + 1 }}</h2>
-        <br /><br />
-        <button class="btn btn-info" v-on:click="getMap(indexHari)">
-          Tampilkan Rute
-        </button>
+        <br />
+        <br />
+        <button class="btn btn-info" v-on:click="getMap(indexHari)">Tampilkan Rute</button>
 
-        <table
-          class="table table-primary table-bordered"
-          style="margin-top: 20px"
-        >
-          <tr style="background-color: #007bff; color: #fff6ff">
-            <th class="text-center" style="width:13%">Waktu</th>
-            <th class="text-center">Keterangan</th>
-            <th class="text-center">Perkiraan Cuaca</th>
-            <th class="text-center">Status</th>
-            <th class="text-center" style="width:13%">Action</th>
-          </tr>
-          <tr v-for="(tempat, index) in hari" v-bind:key="index">
-            <td>{{ tempat.waktu }}</td>
-            <td>{{ tempat.keterangan }}</td>
-            <th>{{ tempat.cuaca }}</th>
-            <th>{{ tempat.status }}</th>
-            <th class="text-center">
-              <button
-                v-if="tempat.rute == undefined"
-                class="btn btn-info btn-sm"
-                v-on:click="detailTujuan(tempat)"
-              >
-                <font-awesome-icon icon="eye" /> Detail
-              </button>
-              <a
-                :href="tempat.rute"
-                v-if="tempat.rute != undefined"
-                class="btn btn-success btn-sm"
-                target="_blank"
-              >
-                Lihat Rute
-              </a>
-            </th>
-          </tr>
-        </table>
+        <v-client-table :data="hari" :columns="columns" :options="optionsTable">
+          <div slot="action" slot-scope="props">
+            <button
+              v-if="props.row.rute == undefined"
+              class="btn btn-info btn-sm"
+              v-on:click="detailTujuan(props.row)"
+            >
+              <font-awesome-icon icon="eye" />Detail
+            </button>
+
+            <a
+              :href="props.row.rute"
+              v-if="props.row.rute != undefined"
+              class="btn btn-success btn-sm"
+              target="_blank"
+            >Lihat Rute</a>
+
+          </div>
+        </v-client-table>
+        
       </div>
     </div>
 
@@ -258,23 +124,14 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              {{ modalDetail.nama }}
-            </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <h5 class="modal-title" id="exampleModalLabel">{{ modalDetail.nama }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body" style="word-break: break-all;">
             <div class="row">
-              <div class="col-md-4">
-                Nama
-              </div>
+              <div class="col-md-4">Nama</div>
               <div class="col-md-8">
                 <b>{{ modalDetail.nama }}</b>
               </div>
@@ -282,9 +139,7 @@
             <hr />
 
             <div class="row">
-              <div class="col-md-4">
-                Alamat
-              </div>
+              <div class="col-md-4">Alamat</div>
               <div class="col-md-8">
                 <b>{{ modalDetail.alamat }}</b>
               </div>
@@ -292,9 +147,7 @@
             <hr />
 
             <div class="row">
-              <div class="col-md-4">
-                Kategori
-              </div>
+              <div class="col-md-4">Kategori</div>
               <div class="col-md-8">
                 <b>{{ modalDetail.kategori }}</b>
               </div>
@@ -302,34 +155,31 @@
             <hr />
 
             <div class="row">
-              <div class="col-md-4">
-                Nilai Sentiment
-              </div>
+              <div class="col-md-4">Nilai Sentiment</div>
               <div class="col-md-8">
-                <b
-                  >{{
-                    modalDetail.sentimentScore
+                <b>
+                  {{
+                  modalDetail.sentimentScore
                   }}
-                  dari 100 orang menilai positif</b
-                ><br /><br />
+                  dari 100 orang menilai positif
+                </b>
+                <br />
+                <br />
                 <router-link
                   target="_blank"
                   class="btn btn-sm btn-success"
                   :to="{ name: 'review', params: { id: modalDetail._id } }"
-                  >Lihat Review</router-link
-                >
+                >Lihat Review</router-link>
               </div>
             </div>
             <hr />
 
             <div class="row">
-              <div class="col-md-4">
-                Sumber
-              </div>
+              <div class="col-md-4">Sumber</div>
               <div class="col-md-8">
-                <a :href="modalDetail.url" target="_blank"
-                  ><b>Google Places</b></a
-                >
+                <a :href="modalDetail.url" target="_blank">
+                  <b>Google Places</b>
+                </a>
               </div>
             </div>
           </div>
@@ -338,20 +188,18 @@
     </div>
 
     <p v-if="dataItinerary != '' && dataItinerary.response.length != 0">
-      <i
-        >*Sumber perkiraan cuaca berasa dari
-        <a href="https://openweathermap.org/" target="_blank"
-          ><b>openwheatermap.org</b></a
-        ></i
-      >
+      <i>
+        *Sumber perkiraan cuaca berasa dari
+        <a href="https://openweathermap.org/" target="_blank">
+          <b>openwheatermap.org</b>
+        </a>
+      </i>
     </p>
     <div style="text-align: center">
       <h2
         style="margin-top: 70px; margin-bottom: 70px"
         v-if="dataItinerary != '' && dataItinerary.response.length == 0"
-      >
-        Itinerary tidak ditemukan
-      </h2>
+      >Itinerary tidak ditemukan</h2>
     </div>
   </div>
 </template>
@@ -362,13 +210,26 @@ import axios from "axios";
 import "vue-loading-overlay/dist/vue-loading.css";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import { loaded } from "vue2-google-maps";
+import Multiselect from "vue-multiselect";
 
 export default {
-  components: { VueGoogleAutocomplete },
+  components: { VueGoogleAutocomplete, Multiselect },
   name: "home",
   data() {
     return {
       kategori: [],
+      listKategori: [
+        "Air Terjun",
+        "Taman Hiburan",
+        "Museum",
+        "Edukasi",
+        "Religi",
+        "Taman",
+        "Rekreasi Air",
+        "Pantai",
+        "Taman Kota",
+        "Kebun Binatang"
+      ],
       gmap: "map",
       showMaps: true,
       tanggalAwal: "",
@@ -378,13 +239,25 @@ export default {
       waypoints: "",
       userLocation: {
         latitude: "-7.942637178081287",
-        longitude: "112.70264024097918",
+        longitude: "112.70264024097918"
       },
       modalDetail: "",
       // url: "http://127.0.0.1:3000/",
       url: "https://travel-main-proccess.herokuapp.com/",
 
       lokasiAwal: "",
+      columns: ["waktu", "keterangan", "cuaca", "status", "action"],
+      optionsTable: {
+        headings: {
+          waktu: "Waktu",
+          keterangan: "Keterangan",
+          cuaca: "Cuaca",
+          status: "Status",
+          action: "Action"
+        }
+        // sortable: ["tempat", "alamat", "kota"],
+        // filterable: ["tempat", "alamat", "kota"],
+      }
     };
   },
 
@@ -393,7 +266,7 @@ export default {
   watch: {
     dataItinerary: function(val) {
       // this.getRoute();
-    },
+    }
   },
 
   methods: {
@@ -406,7 +279,7 @@ export default {
     submit() {
       let loader = this.$loading.show({
         container: this.fullPage ? null : this.$refs.formContainer,
-        canCancel: false,
+        canCancel: false
       });
       const newComponent = new URLSearchParams();
       newComponent.append("latitude", this.userLocation.latitude);
@@ -419,11 +292,11 @@ export default {
 
       axios
         .post(this.url + "mainfeature", newComponent)
-        .then((response) => {
+        .then(response => {
           loader.hide();
           this.dataItinerary = response.data;
         })
-        .catch((e) => {
+        .catch(e => {
           /* eslint-disable no-console */
           console.log(e);
           /* eslint-enable no-console */
@@ -444,10 +317,10 @@ export default {
             position.coords.longitude +
             "&key=AIzaSyBAnpBN3XcUxdUV56dXxTfuhHBvEySitlY"
         )
-        .then((response) => {
+        .then(response => {
           this.$refs.alamat.update(response.data.results[0].formatted_address);
         })
-        .catch((e) => {
+        .catch(e => {
           /* eslint-disable no-console */
           console.log(e);
           /* eslint-enable no-console */
@@ -469,7 +342,7 @@ export default {
       await this.resetMap();
       let destination = this.waypoints[this.waypoints.length - 1].location;
       this.waypoints.splice(this.waypoints.length - 1, 1);
-      this.$refs.map.$mapPromise.then((map) => {
+      this.$refs.map.$mapPromise.then(map => {
         this.directionsService = new google.maps.DirectionsService();
         this.directionsDisplay = new google.maps.DirectionsRenderer();
         this.directionsDisplay.setMap(this.$refs.map.$mapObject);
@@ -482,7 +355,7 @@ export default {
             ),
             waypoints: this.waypoints,
             destination: destination,
-            travelMode: "DRIVING",
+            travelMode: "DRIVING"
           },
           function(response, status) {
             if (status === "OK") {
@@ -504,7 +377,7 @@ export default {
               data[index].location.latitude,
               data[index].location.longitude
             ),
-            stopover: true,
+            stopover: true
           });
         }
       }
@@ -525,7 +398,7 @@ export default {
     detailTujuan(tujuan) {
       this.modalDetail = tujuan;
       $("#detailModal").modal("show");
-    },
-  },
+    }
+  }
 };
 </script>
