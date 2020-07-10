@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row" style="margin-top: 30px;">
+    <div class="row" style="margin-top: 30px; padding-left:20px; padding-right:20px">
       <div
         class="col-md-6 mx-auto"
         style="border: 1px solid grey; padding: 20px; border-radius: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.51);"
@@ -35,6 +35,11 @@
           <br />
           <input type="date" class="form-control" v-model="tanggalAkhir" />
         </div>
+        <div class="form-group">
+          <label for="coordinate">Waktu Mulai:</label>
+          <br />
+          <input type="time" class="form-control" v-model="waktuMulai" />
+        </div>
 
         <div class="form-group">
           <label for="coordinate">Pilih Kategori:</label>
@@ -45,7 +50,6 @@
             :multiple="true"
             :close-on-select="false"
             :clear-on-select="false"
-            :preserve-search="true"
             placeholder="Pilih Tujuan"
           ></multiselect>
         </div>
@@ -214,7 +218,7 @@ import Multiselect from "vue-multiselect";
 
 export default {
   components: { VueGoogleAutocomplete, Multiselect },
-  name: "home",
+  name: "AutomaticItinerary",
   data() {
     return {
       kategori: [],
@@ -228,12 +232,15 @@ export default {
         "Rekreasi Air",
         "Pantai",
         "Taman Kota",
-        "Kebun Binatang"
+        "Kebun Binatang",
+        "Sejarah",
+        "Bukit"
       ],
       gmap: "map",
       showMaps: true,
       tanggalAwal: "",
       tanggalAkhir: "",
+      waktuMulai: "08:00",
       zoomMap: 8,
       dataItinerary: "",
       waypoints: "",
@@ -289,6 +296,7 @@ export default {
       }
       newComponent.append("tanggalMulai", this.tanggalAwal);
       newComponent.append("tanggalAkhir", this.tanggalAkhir);
+      newComponent.append("waktuMulai", this.waktuMulai);
 
       axios
         .post(this.url + "mainfeature", newComponent)

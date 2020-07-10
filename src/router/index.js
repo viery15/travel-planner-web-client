@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import MainItinerary from '../views/MainItinerary.vue'
 import MainFeature from '../views/MainFeature.vue'
 import DaftarWisata from '../views/DaftarWisata.vue'
 import Review from '../views/Review.vue'
@@ -11,12 +11,12 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/',
     name: 'home',
-    component: Home
+    component: MainItinerary
   },
   {
     path: '/itinerary',
     name: 'itinerary',
-    component: Home
+    component: MainItinerary
   },
   {
     path: '/daftar_wisata',
